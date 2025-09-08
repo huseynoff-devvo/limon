@@ -7,7 +7,6 @@
   <title>Limon.az | Şifrəni Yenilə</title>
   <style>
     body {
-      padding: 10px;
       margin: 0;
       font-family: "Segoe UI", Tahoma, sans-serif;
       background: #0d1117;
@@ -75,22 +74,10 @@
       color: #00ff84;
       animation: fadeInText 0.5s ease;
     }
-    @keyframes bounce {
-      from { transform: translateY(0); }
-      to { transform: translateY(-15px); }
-    }
-    @keyframes wave {
-      0% { transform: rotate(0deg); }
-      50% { transform: rotate(30deg); }
-      100% { transform: rotate(0deg); }
-    }
-    @keyframes fadeInText {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    @keyframes fadeOut {
-      to { opacity: 0; visibility: hidden; }
-    }
+    @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-15px); } }
+    @keyframes wave { 0% { transform: rotate(0deg); } 50% { transform: rotate(30deg); } 100% { transform: rotate(0deg); } }
+    @keyframes fadeInText { from { opacity: 0; } to { opacity: 1; } }
+    @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
 
     /* 🔹 Əsas form */
     #content {
@@ -105,50 +92,23 @@
       animation: appear 0.8s ease forwards;
       animation-delay: 1.6s;
     }
-    h1 {
-      font-size: 1.6rem;
-      margin-bottom: 10px;
-      color: #00ff84;
-    }
-    p.info {
-      margin-bottom: 20px;
-      font-size: 0.95rem;
-      color: #cfd6e0;
-    }
+    h1 { font-size: 1.6rem; margin-bottom: 10px; color: #00ff84; }
+    p.info { margin-bottom: 20px; font-size: 0.95rem; color: #cfd6e0; }
     input {
-      width: 100%;
-      padding: 12px;
-      margin: 10px 0;
-      border-radius: 8px;
-      border: none;
-      outline: none;
-      background: #0d1117;
-      color: #e6edf3;
-      font-size: 1rem;
+      width: 100%; padding: 12px; margin: 10px 0;
+      border-radius: 8px; border: none; outline: none;
+      background: #0d1117; color: #e6edf3; font-size: 1rem;
     }
     button {
-      width: 100%;
-      padding: 12px;
-      background: #00ff84;
-      border: none;
-      border-radius: 8px;
-      font-size: 1rem;
-      font-weight: bold;
-      cursor: pointer;
-      transition: 0.3s;
+      width: 100%; padding: 12px;
+      background: #00ff84; border: none; border-radius: 8px;
+      font-size: 1rem; font-weight: bold; cursor: pointer; transition: 0.3s;
     }
     button:hover { background: #00cc6a; }
-    .message {
-      margin-top: 15px;
-      font-size: 0.95rem;
-      min-height: 20px;
-    }
+    .message { margin-top: 15px; font-size: 0.95rem; min-height: 20px; }
     .success { color: #00ff84; }
     .error { color: #ff4d4d; }
-
-    @keyframes appear {
-      to { opacity: 1; }
-    }
+    @keyframes appear { to { opacity: 1; } }
   </style>
 </head>
 <body>
@@ -160,7 +120,7 @@
       <div class="mouth"></div>
       <div class="hand"></div>
     </div>
-    <!-- <p>Limon sizi salamlayır 🍋</p> -->
+    <p>Limon sizi salamlayır 🍋</p>
   </div>
 
   <!-- 🔹 Reset password form -->
@@ -191,14 +151,24 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    // URL parametrləri
     const query = new URLSearchParams(window.location.search);
     const oobCode = query.get("oobCode");
-    const email = query.get("email") || "";
 
-    // E-poçtu göstər
-    document.getElementById("userEmail").textContent = email ? `${email} üçün şifrənizi yeniləyin` : "Şifrənizi yeniləyin";
+    // Email-i əldə edib göstərmək
+    async function init() {
+      const messageEl = document.getElementById("message");
+      try {
+        const email = await verifyPasswordResetCode(auth, oobCode);
+        document.getElementById("userEmail").textContent = `${email} üçün şifrənizi yeniləyin`;
+      } catch (error) {
+        messageEl.textContent = "Xəta baş verdi: " + error.message;
+        messageEl.className = "message error";
+      }
+    }
 
+    init();
+
+    // Şifrəni təsdiqləmə funksiyası
     async function resetPassword() {
       const newPassword = document.getElementById("newPassword").value;
       const messageEl = document.getElementById("message");
@@ -210,7 +180,6 @@
       }
 
       try {
-        await verifyPasswordResetCode(auth, oobCode);
         await confirmPasswordReset(auth, oobCode, newPassword);
         messageEl.textContent = "✅ Şifrəniz uğurla dəyişdirildi!";
         messageEl.className = "message success";
