@@ -7,29 +7,113 @@
   <title>Limon.az | Şifrəni Yenilə</title>
   <style>
     body {
+      padding: 10px;
       margin: 0;
       font-family: "Segoe UI", Tahoma, sans-serif;
       background: #0d1117;
       color: #e6edf3;
       line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* 🔹 Loading ekranı */
+    #loading {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: #0d1117;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      animation: fadeOut 0.6s ease forwards;
+      animation-delay: 1.6s;
+    }
+    .lemon {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      background: #f6d743;
+      border-radius: 50% 50% 45% 55% / 55% 45% 55% 45%;
+      box-shadow: 0 0 25px rgba(246, 215, 67, 0.6);
       display: flex;
       align-items: center;
       justify-content: center;
-      min-height: 100vh;
+      animation: bounce 1s infinite alternate;
     }
-    .card {
-      background: #161b22;
+    .eye {
+      position: absolute;
+      width: 12px; height: 12px;
+      background: #0d1117;
+      border-radius: 50%;
+      top: 40px;
+    }
+    .eye.left { left: 35px; }
+    .eye.right { right: 35px; }
+    .mouth {
+      position: absolute;
+      bottom: 35px;
+      width: 40px;
+      height: 20px;
+      border-bottom: 4px solid #0d1117;
+      border-radius: 0 0 50% 50%;
+    }
+    .hand {
+      position: absolute;
+      right: -25px;
+      top: 50px;
+      width: 25px; height: 25px;
+      background: #f6d743;
+      border-radius: 50%;
+      transform-origin: left center;
+      animation: wave 1s infinite;
+    }
+    #loading p {
+      margin-top: 20px;
+      font-size: 1.2rem;
+      color: #00ff84;
+      animation: fadeInText 0.5s ease;
+    }
+    @keyframes bounce {
+      from { transform: translateY(0); }
+      to { transform: translateY(-15px); }
+    }
+    @keyframes wave {
+      0% { transform: rotate(0deg); }
+      50% { transform: rotate(30deg); }
+      100% { transform: rotate(0deg); }
+    }
+    @keyframes fadeInText {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes fadeOut {
+      to { opacity: 0; visibility: hidden; }
+    }
+
+    /* 🔹 Əsas form */
+    #content {
+      max-width: 400px;
+      margin: 120px auto;
       padding: 30px;
       border-radius: 12px;
-      max-width: 400px;
-      width: 100%;
+      background: #161b22;
       box-shadow: 0 4px 20px rgba(0,0,0,0.5);
       text-align: center;
+      opacity: 0;
+      animation: appear 0.8s ease forwards;
+      animation-delay: 1.6s;
     }
     h1 {
       font-size: 1.6rem;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
       color: #00ff84;
+    }
+    p.info {
+      margin-bottom: 20px;
+      font-size: 0.95rem;
+      color: #cfd6e0;
     }
     input {
       width: 100%;
@@ -53,32 +137,46 @@
       cursor: pointer;
       transition: 0.3s;
     }
-    button:hover {
-      background: #00cc6a;
-    }
+    button:hover { background: #00cc6a; }
     .message {
       margin-top: 15px;
       font-size: 0.95rem;
+      min-height: 20px;
     }
     .success { color: #00ff84; }
     .error { color: #ff4d4d; }
+
+    @keyframes appear {
+      to { opacity: 1; }
+    }
   </style>
 </head>
 <body>
-  <div class="card">
+  <!-- 🔹 Loading ekranı -->
+  <div id="loading">
+    <div class="lemon">
+      <div class="eye left"></div>
+      <div class="eye right"></div>
+      <div class="mouth"></div>
+      <div class="hand"></div>
+    </div>
+    <!-- <p>Limon sizi salamlayır 🍋</p> -->
+  </div>
+
+  <!-- 🔹 Reset password form -->
+  <div id="content">
     <h1>Şifrəni Yenilə</h1>
-    <p>Yeni şifrənizi daxil edin:</p>
+    <p class="info" id="userEmail">Şifrənizi yeniləyin</p>
     <input type="password" id="newPassword" placeholder="Yeni şifrə">
     <button onclick="resetPassword()">Şifrəni Təsdiqlə</button>
     <div class="message" id="message"></div>
   </div>
 
-  <!-- Firebase SDK -->
+  <!-- 🔹 Firebase SDK -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
     import { getAuth, confirmPasswordReset, verifyPasswordResetCode } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
 
-    // 🔑 Sənin konfiqurasiyan
     const firebaseConfig = {
       apiKey: "AIzaSyABaf0trfF-kdAe4BJUMDiPtfNZ1_5T0FQ",
       authDomain: "limon-pass.firebaseapp.com",
@@ -93,9 +191,13 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
 
-    // URL-dən o "oobCode"-u götürürük
+    // URL parametrləri
     const query = new URLSearchParams(window.location.search);
     const oobCode = query.get("oobCode");
+    const email = query.get("email") || "";
+
+    // E-poçtu göstər
+    document.getElementById("userEmail").textContent = email ? `${email} üçün şifrənizi yeniləyin` : "Şifrənizi yeniləyin";
 
     async function resetPassword() {
       const newPassword = document.getElementById("newPassword").value;
@@ -108,9 +210,7 @@
       }
 
       try {
-        // əvvəlcə kodu təsdiqləyirik
         await verifyPasswordResetCode(auth, oobCode);
-        // sonra şifrəni dəyişirik
         await confirmPasswordReset(auth, oobCode, newPassword);
         messageEl.textContent = "✅ Şifrəniz uğurla dəyişdirildi!";
         messageEl.className = "message success";
