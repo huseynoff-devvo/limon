@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/png" href="https://res.cloudinary.com/dxymbsg0p/image/upload/v1757092810/vecteezy_cute-lemon-cartoon_47434226_jgnaor.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Limon.az | Şifrəni Yenilə</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Segoe UI", Tahoma, sans-serif;
+      background: #0d1117;
+      color: #e6edf3;
+      line-height: 1.6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+    }
+    .card {
+      background: #161b22;
+      padding: 30px;
+      border-radius: 12px;
+      max-width: 400px;
+      width: 100%;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+      text-align: center;
+    }
+    h1 {
+      font-size: 1.6rem;
+      margin-bottom: 20px;
+      color: #00ff84;
+    }
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      background: #0d1117;
+      color: #e6edf3;
+      font-size: 1rem;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #00ff84;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #00cc6a;
+    }
+    .message {
+      margin-top: 15px;
+      font-size: 0.95rem;
+    }
+    .success { color: #00ff84; }
+    .error { color: #ff4d4d; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>Şifrəni Yenilə</h1>
+    <p>Yeni şifrənizi daxil edin:</p>
+    <input type="password" id="newPassword" placeholder="Yeni şifrə">
+    <button onclick="resetPassword()">Şifrəni Təsdiqlə</button>
+    <div class="message" id="message"></div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+    import { getAuth, confirmPasswordReset, verifyPasswordResetCode } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
+
+    // 🔑 Sənin konfiqurasiyan
+    const firebaseConfig = {
+      apiKey: "AIzaSyABaf0trfF-kdAe4BJUMDiPtfNZ1_5T0FQ",
+      authDomain: "limon-pass.firebaseapp.com",
+      databaseURL: "https://limon-pass-default-rtdb.firebaseio.com",
+      projectId: "limon-pass",
+      storageBucket: "limon-pass.firebasestorage.app",
+      messagingSenderId: "88395363912",
+      appId: "1:88395363912:web:71b1666a98318b35540a7d",
+      measurementId: "G-H1BP4YL7MS"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // URL-dən o "oobCode"-u götürürük
+    const query = new URLSearchParams(window.location.search);
+    const oobCode = query.get("oobCode");
+
+    async function resetPassword() {
+      const newPassword = document.getElementById("newPassword").value;
+      const messageEl = document.getElementById("message");
+
+      if (!newPassword || newPassword.length < 6) {
+        messageEl.textContent = "Şifrə minimum 6 simvol olmalıdır!";
+        messageEl.className = "message error";
+        return;
+      }
+
+      try {
+        // əvvəlcə kodu təsdiqləyirik
+        await verifyPasswordResetCode(auth, oobCode);
+        // sonra şifrəni dəyişirik
+        await confirmPasswordReset(auth, oobCode, newPassword);
+        messageEl.textContent = "✅ Şifrəniz uğurla dəyişdirildi!";
+        messageEl.className = "message success";
+      } catch (error) {
+        messageEl.textContent = "Xəta baş verdi: " + error.message;
+        messageEl.className = "message error";
+      }
+    }
+  </script>
+</body>
+</html>
