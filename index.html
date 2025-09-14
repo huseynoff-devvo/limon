@@ -4,31 +4,42 @@
   <meta charset="UTF-8">
   <link rel="icon" type="image/png" href="https://res.cloudinary.com/dxymbsg0p/image/upload/v1757092810/vecteezy_cute-lemon-cartoon_47434226_jgnaor.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Limon.az | Şifrəni Yenilə</title>
+  <title>Limon.az | Hesabın Bloklanması</title>
   <style>
+    * {
+  user-select: none;   /* Seçməni bloklayır */
+  -webkit-user-select: none; /* Safari üçün */
+  -ms-user-select: none;     /* Köhnə IE üçün */
+}
+img {
+  pointer-events: none;  /* şəkil kliklənməsin */
+  user-drag: none;       /* brauzerdə sürüklənməsin */
+  -webkit-user-drag: none; /* Safari/Chrome üçün */
+}
     body {
       margin: 0;
       font-family: "Segoe UI", Tahoma, sans-serif;
-      background: #0d1117;
+      background: #101010;
       color: #e6edf3;
-      line-height: 1.6;
+      line-height: 1.7;
       overflow-x: hidden;
     }
 
-    /* 🔹 Loading ekranı */
+    /* Loading ekranı */
     #loading {
       position: fixed;
       top: 0; left: 0;
       width: 100%; height: 100%;
-      background: #0d1117;
+      background: #101010;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       z-index: 9999;
-      animation: fadeOut 0.6s ease forwards;
-      animation-delay: 1.6s;
+      animation: fadeOut 0.5s ease forwards;
+      animation-delay: 1s;
     }
+
     .lemon {
       position: relative;
       width: 120px;
@@ -41,23 +52,26 @@
       justify-content: center;
       animation: bounce 1s infinite alternate;
     }
+
     .eye {
       position: absolute;
       width: 12px; height: 12px;
-      background: #0d1117;
+      background: #101010;
       border-radius: 50%;
       top: 40px;
     }
     .eye.left { left: 35px; }
     .eye.right { right: 35px; }
+
     .mouth {
       position: absolute;
       bottom: 35px;
       width: 40px;
       height: 20px;
-      border-bottom: 4px solid #0d1117;
+      border-bottom: 4px solid #101010;
       border-radius: 0 0 50% 50%;
     }
+
     .hand {
       position: absolute;
       right: -25px;
@@ -68,51 +82,75 @@
       transform-origin: left center;
       animation: wave 1s infinite;
     }
-    #loading p {
-      margin-top: 20px;
-      font-size: 1.2rem;
-      color: #00ff84;
-      animation: fadeInText 0.5s ease;
-    }
-    @keyframes bounce { from { transform: translateY(0); } to { transform: translateY(-15px); } }
-    @keyframes wave { 0% { transform: rotate(0deg); } 50% { transform: rotate(30deg); } 100% { transform: rotate(0deg); } }
-    @keyframes fadeInText { from { opacity: 0; } to { opacity: 1; } }
-    @keyframes fadeOut { to { opacity: 0; visibility: hidden; } }
 
-    /* 🔹 Əsas form */
+    @keyframes bounce {
+      from { transform: translateY(0); }
+      to { transform: translateY(-15px); }
+    }
+    @keyframes wave {
+      0% { transform: rotate(0deg); }
+      50% { transform: rotate(30deg); }
+      100% { transform: rotate(0deg); }
+    }
+    @keyframes fadeOut {
+      to { opacity: 0; visibility: hidden; }
+    }
+
+    /* Əsas məzmun */
     #content {
-      max-width: 400px;
-      margin: 120px auto;
+      max-width: 900px;
+      margin: auto;
       padding: 30px;
       border-radius: 12px;
-      background: #161b22;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-      text-align: center;
+      margin-top: -50px;
       opacity: 0;
       animation: appear 0.8s ease forwards;
-      animation-delay: 1.6s;
+      animation-delay: 1s;
     }
-    h1 { font-size: 1.6rem; margin-bottom: 10px; color: #00ff84; }
-    p.info { margin-bottom: 20px; font-size: 0.95rem; color: #cfd6e0; }
-    input {
-      width: 100%; padding: 12px; margin: 10px 0;
-      border-radius: 8px; border: none; outline: none;
-      background: #0d1117; color: #e6edf3; font-size: 1rem;
+
+    header {
+      text-align: center;
+      padding: 20px;
     }
-    button {
-      width: 100%; padding: 12px;
-      background: #00ff84; border: none; border-radius: 8px;
-      font-size: 1rem; font-weight: bold; cursor: pointer; transition: 0.3s;
+    header h1 {
+      font-size: 2.3rem;
+      color: #00ff84;
     }
-    button:hover { background: #00cc6a; }
-    .message { margin-top: 15px; font-size: 0.95rem; min-height: 20px; }
-    .success { color: #00ff84; }
-    .error { color: #ff4d4d; }
-    @keyframes appear { to { opacity: 1; } }
+    header p {
+      font-size: 1.05rem;
+      color: #9ca3af;
+      margin-top: 8px;
+    }
+
+    h2 {
+      color: #00ff84;
+      margin-top: 25px;
+      font-size: 1.3rem;
+    }
+    p {
+      margin-bottom: 12px;
+      font-size: 0.98rem;
+    }
+
+    ul {
+      margin: 10px 0 20px 25px;
+      list-style: square;
+    }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 0.85rem;
+      color: #6b7280;
+    }
+
+    @keyframes appear {
+      to { opacity: 1; }
+    }
   </style>
 </head>
 <body>
-  <!-- 🔹 Loading ekranı -->
+  <!-- Loading ekranı -->
   <div id="loading">
     <div class="lemon">
       <div class="eye left"></div>
@@ -120,74 +158,53 @@
       <div class="mouth"></div>
       <div class="hand"></div>
     </div>
-    <p>Limon sizi salamlayır 🍋</p>
   </div>
 
-  <!-- 🔹 Reset password form -->
+  <!-- Əsas kontent -->
   <div id="content">
-    <h1>Şifrəni Yenilə</h1>
-    <p class="info" id="userEmail">Şifrənizi yeniləyin</p>
-    <input type="password" id="newPassword" placeholder="Yeni şifrə">
-    <button onclick="resetPassword()">Şifrəni Təsdiqlə</button>
-    <div class="message" id="message"></div>
+    <header>
+      <h1>Hesabın Bloklanması</h1>
+      <p>limon.az – Hesabınızın təhlükəsizliyi və istifadə qaydaları</p>
+    </header>
+
+    <section>
+      <h2>1. Hesabın Bloklanma Şərtləri</h2>
+      <p>Limon.az platformasında hesab aşağıdakı hallarda bloklana bilər:</p>
+      <ul>
+        <li>Qaydaların pozulması və ya spama yol verilməsi</li>
+        <li>Digər istifadəçilərə zərər vermək və ya təhqir</li>
+        <li>Hesabın oğurlanması və ya şübhəli fəaliyyət</li>
+        <li>Platforma qaydalarına zidd olan hər hansı fəaliyyət</li>
+      </ul>
+
+      <h2>2. Bloklama Növləri</h2>
+      <p>Hesab bloklamaları iki növə ayrılır:</p>
+      <ul>
+        <li><b>Müvəqqəti Bloklama:</b> Müəyyən müddət üçün hesab girişinə məhdudiyyət qoyulur.</li>
+        <li><b>Daimi Bloklama:</b> Qaydaların ciddi pozulması nəticəsində hesab tamamilə deaktiv edilir.</li>
+      </ul>
+
+      <h2>3. Bloklamaya Etiraz</h2>
+      <p>İstifadəçi bloklamaya etiraz etmək istəyirsə, aşağıdakı ünvanlara müraciət edə bilər:</p>
+      <ul>
+        <li><b>support@limon.az</b></li>
+        <li><b>limon.az.team@gmail.com</b></li>
+      </ul>
+      <p>Etiraz zamanı hesab bloklamasının səbəbi nəzərdən keçirilir və qərar istifadəçiyə bildirilir.</p>
+
+      <h2>4. Hesabın Təhlükəsizliyi</h2>
+      <p>Bloklanmanın qarşısını almaq üçün hesab məlumatlarınızı təhlükəsiz saxlayın və başqasına verməyin. Güclü şifrə və iki faktorlu autentifikasiya istifadə etmək tövsiyə olunur.</p>
+
+      <h2>5. Məsuliyyət</h2>
+      <p>Hesabın bloklanması nəticəsində yaranan hər hansı itki və ya məhdudiyyətlər üçün Limon.az istifadəçi tərəfindən məsuliyyət daşımır, lakin bloklama səbəbləri və proseduru şəffaf şəkildə təqdim olunur.</p>
+
+      <h2>6. Əlaqə</h2>
+      <p>Bloklanma ilə bağlı sual və ya müraciət üçün bizimlə <b>support@limon.az</b> və ya <b>limon.az.team@gmail.com</b> ünvanları vasitəsilə əlaqə saxlayın.</p>
+    </section>
   </div>
 
-  <!-- 🔹 Firebase SDK -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-    import { getAuth, confirmPasswordReset, verifyPasswordResetCode } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-auth.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyABaf0trfF-kdAe4BJUMDiPtfNZ1_5T0FQ",
-      authDomain: "limon-pass.firebaseapp.com",
-      databaseURL: "https://limon-pass-default-rtdb.firebaseio.com",
-      projectId: "limon-pass",
-      storageBucket: "limon-pass.firebasestorage.app",
-      messagingSenderId: "88395363912",
-      appId: "1:88395363912:web:71b1666a98318b35540a7d",
-      measurementId: "G-H1BP4YL7MS"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-
-    const query = new URLSearchParams(window.location.search);
-    const oobCode = query.get("oobCode");
-
-    // Email-i əldə edib göstərmək
-    async function init() {
-      const messageEl = document.getElementById("message");
-      try {
-        const email = await verifyPasswordResetCode(auth, oobCode);
-        document.getElementById("userEmail").textContent = `${email} üçün şifrənizi yeniləyin`;
-      } catch (error) {
-        messageEl.textContent = "Xəta baş verdi: " + error.message;
-        messageEl.className = "message error";
-      }
-    }
-
-    init();
-
-    // Şifrəni təsdiqləmə funksiyası
-    async function resetPassword() {
-      const newPassword = document.getElementById("newPassword").value;
-      const messageEl = document.getElementById("message");
-
-      if (!newPassword || newPassword.length < 6) {
-        messageEl.textContent = "Şifrə minimum 6 simvol olmalıdır!";
-        messageEl.className = "message error";
-        return;
-      }
-
-      try {
-        await confirmPasswordReset(auth, oobCode, newPassword);
-        messageEl.textContent = "✅ Şifrəniz uğurla dəyişdirildi!";
-        messageEl.className = "message success";
-      } catch (error) {
-        messageEl.textContent = "Xəta baş verdi: " + error.message;
-        messageEl.className = "message error";
-      }
-    }
-  </script>
+  <footer>
+    © 2025 Limon.az – Azərbaycanın sosial media platforması
+  </footer>
 </body>
 </html>
